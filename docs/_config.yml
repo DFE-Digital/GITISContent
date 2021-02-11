@@ -1,0 +1,14 @@
+title:
+lang: en
+description: Get Into Teaching Asset Delivery 
+
+remote_theme: rundocs/jekyll-rtd-theme
+
+
+readme_index:
+  with_frontmatter: true
+
+plugins:
+  - jemoji
+  - jekyll-avatar
+  - jekyll-mentions
