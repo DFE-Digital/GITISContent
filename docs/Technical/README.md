@@ -1,5 +1,5 @@
 # Technical
-Securly connecting Google Drive to Microsoft Azure, and providing a bespoke domain
+Securely connecting Google Drive to Microsoft Azure, and providing a bespoke domain
 
 ![Overview](./asset.png)
 
@@ -12,7 +12,7 @@ Team members who need to manage assets can be granted **Contributor** access by 
 ### Google Scripts
 Periodically a [Google Script ](https://github.com/DFE-Digital/GITISContent/tree/main/Google) needs to run. This will transfer the assets from the [Shared drive](https://drive.google.com/drive/folders/0AJ6YEVtSfOQVUk9PVA) to Azure.
 
-The script needs to have a [Azure SAS Key](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview) embedded into it, which gives access to the Azure Storage account. Since this key is vunerable, it is stored as a GitHub Secret and injected into the script at deployment time.
+The script needs to have a [Azure SAS Key](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview) embedded into it, which gives access to the Azure Storage account. Since this key is sensistive, it is stored as a GitHub Secret and injected into the script at deployment time.
 
 
 ## Azure

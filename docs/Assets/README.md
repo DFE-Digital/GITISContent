@@ -19,7 +19,7 @@ The following 3 folders have been set up and should only have the correct type o
 
 * **EventImages** is only currently for images of the buildings that DfE events are taking place at - these images will be embedded into event pages on the website.
 
-Files should be overwritten new versions. Access should be restricted to uses to prevent deleteing anything.
+Files should be overwritten with/by new versions. Access should be restricted to uses to prevent deleteing anything.
 
 If a delete is needed then the contributor must get approval from the CRM devs and stakeholders first - even after a campaign has finished.
 
