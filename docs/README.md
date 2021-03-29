@@ -1,9 +1,13 @@
 # Get into Teaching Asset Manager
 
 ## Introduction
-Internal and external contributors to the Department of Educations, Get into Teaching system need to be able to upload assets. These need to be delivered as URLs so that large amounts of recipients can read them.
+Contributors to the Department of Educations (DfE) "Get into Teaching" system need to be able to upload various files such as images and calendar files, so they can be used in email campaigns.
 
-Contributors will upload a file into Google Drive, and within 10 minutes that file will be available as a URL on the domain [https://assets-getintoteaching.education.gov.uk/](https://assets-getintoteaching.education.gov.uk/)
+These email campaigns will involve sending messages to thousands of users, who will want to see any images and open and invitations. Therefore a Content Delivery system is required to handle the traffic.
+
+Contributors can be external partners with the DfE and therefore will need to have access to upload these files. So Google Drive has been selected. 
+
+Within 10 minutes of a file being uplaoded it will be available as a URL on the domain [https://assets-getintoteaching.education.gov.uk/](https://assets-getintoteaching.education.gov.uk/)
 
 ## Usage
 [How to Use](Assets/README.md)
