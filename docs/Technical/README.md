@@ -28,8 +28,16 @@ A [Content Delivery Network](https://docs.microsoft.com/en-gb/azure/cdn/cdn-over
 ### DNS
 DNS needs to be configured by passing the details from Azure when you create the CDN to the CIP team using a Service Now Ticket.
 
-## Github
+## Delivery
 ### Secrets
-The Azure [Shared Access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview) key needs to be stored as a GitHub secret. This is to enable the pipeline 
+Using [standard processes](https://github.com/DFE-Digital/bat-platform-building-blocks/tree/master/scripts/fetch_config) developed by DevOps, keys will be maintained in Azure Key_vault 
+
+* Azure [Shared Access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview) 
+
+* Script Id, when the script is created a unique id is also generated, you may need to `create` or `clone` a project first, and then store the script id.
+
+
+### Delivery
+
 
 
