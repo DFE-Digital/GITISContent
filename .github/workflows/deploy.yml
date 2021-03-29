@@ -9,4 +9,4 @@ jobs:
     
     steps:
     - name: Install Clasp
-      run: npm install -g @google/clasp
+      run: sudo npm install -g @google/clasp
