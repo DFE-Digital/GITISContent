@@ -36,8 +36,33 @@ Using [standard processes](https://github.com/DFE-Digital/bat-platform-building-
 
 * Script Id, when the script is created a unique id is also generated, you may need to `create` or `clone` a project first, and then store the script id.
 
+* Google Credentials, You will need to go to the [Google Console](https://console.cloud.google.com/apis/credentials?project=analysis-283611) and create a new [OAuth 2.0 Client ID](https://cloud.google.com/docs/authentication?_ga=2.57888426.-1487445474.1614340844&_gac=1.249058805.1614679555.Cj0KCQiA4feBBhC9ARIsABp_nbV09y-DZeJFsJwvTBNFQCM4DY-2-2dgU8ZJxFvPW4no2Rux2z3ZfnwaAluvEALw_wcB), When choosing your Application Type it is **_important_** that you select **Desktop App**. Once you have created the credentials you will be able to download the json file.
+
+```
+{"installed":{
+       "client_id":"xxxxxxxxxx.apps.googleusercontent.com",
+       "project_id":"xxxxxxxxxxxxx",
+       "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+       "token_uri":"https://oauth2.googleapis.com/token",
+       "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+       "client_secret":"xxxxxxxxxxxxx",
+       "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
+ 
+```
+
 
 ### Delivery
+
+Clasp requires the User has enabled the Apps Script API. Enable it by visiting [https://script.google.com/home/usersettings.
+](https://script.google.com/home/usersettings)
+
+A Makefile has been provided to assist with common tasks:
+
+* **edit_secrets** - This process will extract the secrets stored in Azure Key-Vault and enable the user to amend them.
+
+* **generate_credentials** - The secrets are Google Credentials, they need to be generated into a `creds.json` file to allow clasp to use them.
+
+* **install** - Takes the templates, applies the secrets and pushes them up to Google Scripts. 
 
 
 

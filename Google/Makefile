@@ -19,6 +19,7 @@ set-azure-account: ${environment}
 	az account set -s ${AZ_SUBSCRIPTION}
 
 clean:
+	rm -f Code.js .clasp.json creds.json
 	[ ! -f fetch_config.rb ]  \
 	    rm -f fetch_config.rb \
 	    || true
@@ -38,6 +39,9 @@ npm:
 	    || true
 	echo using Clasp version `clasp --version`
 
+generate_credentials:
+	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS}  -f shell-env-var -d command -- jinja2 creds.json.tmpl > creds.json
+	clasp login --creds creds.json
 
 edit_secrets:
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS} -e -d azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS} -f yaml -c
@@ -45,4 +49,4 @@ edit_secrets:
 install: pip npm install-fetch-config set-azure-account
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS}  -f shell-env-var -d command -- jinja2 Code.js.tmpl > Code.js
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS}  -f shell-env-var -d command -- jinja2 clasp.json.tmpl > .clasp.json
-	echo "Push Project" 
+	clasp push
