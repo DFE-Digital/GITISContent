@@ -29,6 +29,7 @@ function uploadImagesToAzureStorage( imagesSubFolder, imagesFolderId){
      'payload' : blob.getAs(contentType),
       contentType: contentType,
       headers: {
+        'x-ms-blob-cache-control' : 'public, max-age=3600', 
         'x-ms-version'  : '2020-02-10',
         'x-ms-date': (new Date()).toUTCString(),
         'Content-Type': contentType,
