@@ -1,42 +1,58 @@
-function myFunction() {
-  var drives = Drive.Drives.list();
+function createTimeTrigger() {
+  ScriptApp.newTrigger("uploadAssets")
+    .timeBased()
+    .everyMinutes(<%= ENV.fetch('TRIGGER_MINUTES') %>)
+    .create();
+ }
+
+function uploadAssets() {
+  var drives = Drive.Drives.list({ "q": "name contains 'GITISContent'" });
   drives.items.map(drive => {
     Logger.log(`${drive.name} - ${drive.id}`);
     var folder = DriveApp.getFolderById(drive.id);
-    var folders= folder.getFolders();
+    var folders = folder.getFolders();
     while (folders.hasNext()) {
-     var folder = folders.next();
-     Logger.log(`${folder.getId()} - ${folder.getName()}`);
-     uploadImagesToAzureStorage(folder.getName(), folder.getId());
+      var folder = folders.next();
+      Logger.log(`Folder getName: ${folder.getName()} - getId: ${folder.getId()}`);
+      uploadImagesToAzureStorage(folder.getName(), folder.getId());
     }
   });
 }
 
-function uploadImagesToAzureStorage( imagesSubFolder, imagesFolderId){
+function uploadImagesToAzureStorage(imagesSubFolder, imagesFolderId) {
   let imagesFolder = DriveApp.getFolderById(imagesFolderId);
   let dateNow = new Date();
-  let files = imagesFolder.getFiles();
-  while(files.hasNext()){
+  let formattedDate = dateNow.toISOString();
+  let dateYesterday = new Date(dateNow.setDate(dateNow.getDate() - 1));
+  let formattedDateYesterday = dateYesterday.toISOString();
+  Logger.log(`formattedDate: ${formattedDate} -  formattedDateYesterday: ${formattedDateYesterday}`);
+  let searchQuery = `modifiedDate > '${formattedDateYesterday}'`;
+  Logger.log(`Search for files where: ${searchQuery}`);
+
+  let files = imagesFolder.searchFiles(`${searchQuery}`);
+  while (files.hasNext()) {
     let file = files.next();
-    Logger.log(`${file.getId()} - ${file.getName()} - ${file.getUrl()}`);
-    let age =  dateNow - file.getLastUpdated();
+    Logger.log(`File getName: ${file.getName()} - getId: ${file.getId()} - getUrl: ${file.getUrl()}`);
+    Logger.log(`File getLastUpdated: ${file.getLastUpdated()}`);
+    let age = dateNow - file.getLastUpdated();
     let newage = dateNow - 3600;
-    Logger.log( `Now ${dateNow}, Last Updated ${file.getLastUpdated()}, Age is ${age}, Check is ${newage}`)
+    Logger.log(`Now: ${dateNow}, file getLastUpdated: ${file.getLastUpdated()}, age: ${age}, newage: ${newage}`)
     let blob = file.getBlob();
     let contentType = blob.getContentType();
     let options = {
-     'method' : 'PUT',
-     'payload' : blob.getAs(contentType),
+      'method': 'PUT',
+      'payload': blob.getAs(contentType),
       contentType: contentType,
       headers: {
-        'x-ms-version'  : '2020-02-10',
+        'x-ms-blob-cache-control': 'public, max-age=3600',
+        'x-ms-version': '2020-02-10',
         'x-ms-date': (new Date()).toUTCString(),
         'Content-Type': contentType,
         'x-ms-blob-content-type': contentType,
         'x-ms-blob-type': 'BlockBlob'
       }
     };
-    let azureStorageUrl =`https://s146p01gitiscontent.blob.core.windows.net/content/${imagesSubFolder}/${file.getName()}?sp=racwdl&st=2021-03-01T13:59:29Z&se=2022-03-01T21:59:29Z&spr=https&sv=2020-02-10&sr=c&sig={{environ( 'SAS' )}}`
+    let azureStorageUrl = `https://<%= ENV.fetch('STORAGE_NAME') %>.blob.core.windows.net/content/${imagesSubFolder}/${file.getName()}?<%= ENV.fetch('SAS') %>`
     let response = UrlFetchApp.fetch(azureStorageUrl, options);
     Logger.log(response.getContentText());
   }

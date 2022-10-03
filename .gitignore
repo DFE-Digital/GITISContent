@@ -17,4 +17,14 @@
 # Ignore .DS_store file
 .DS_Store
 
+# Ignore Azure Storage parameter file
+azure/storage_parameters.json
+
 Staticfile.auth
+
+fetch_config.rb
+
+# Ignore Google clasp files
+Google/Code.js
+Google/.clasp.json
+Google/creds.json
