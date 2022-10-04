@@ -67,7 +67,7 @@ storage_create: install-fetch-config set-azure-account
 storage_sas_create: set-azure-account
 	$(eval export SAS_EXPIRY=$(shell date -u -v +365d '+%Y-%m-%dT%H:%MZ'))
 	$(eval export SAS_START=$(shell date -u '+%Y-%m-%dT%H:%MZ'))
-	az storage container generate-sas --account-name ${STORAGE_NAME} -n ${CONTAINER_NAME} --permissions racw --start ${SAS_START} --expiry ${SAS_EXPIRY} --https-only
+	az storage container generate-sas --account-name ${STORAGE_NAME} -n content --permissions racw --start ${SAS_START} --expiry ${SAS_EXPIRY} --https-only
 
 print_secrets: install-fetch-config set-azure-account
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS} -f yaml
