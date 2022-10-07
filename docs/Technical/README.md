@@ -69,13 +69,17 @@ Assuming the storage account, DNS, CDN are already in place. To get setup, deplo
 
 * Create a new Apps Script project and obtain the Script ID under Project Settings or acquire the Script ID from the existing project.
 
+* Login to Azure using `make <environment> az-login`. This can either be run manually, or it will be run as part of the `install` and `deploy` make targets.
+
 * Add/update this in Key Vault as the SCRIPT_ID using `make <environment> edit_secrets` or add it to a YAML file when the secret is initially created using the Azure CLI.
 
-* Execute `clasp login` and use the same account used earlier.
+* Execute `make clasp_login` and use the same account used earlier allowing any required permissions..
 
-* Execute the command `make <environment> install`. This will populate the Code.js and clasp.json files with the required project information and upload the script to the specified Apps Script project.
+* Execute the command `make <environment> install`. This will populate the Code.js, Trigger.js and clasp.json files with the required project information so they can be checked prior to uploading to the Apps Script project.
 
-* Execute `clasp open` to go to the Apps Script project and run the createTimeTrigger() to automatically create the trigger to run the uploadAssets() function at the specified time intervals. Authorise any required permissions.
+* Execute the commane `make <environment> deploy`. This populates the code files and uploads the script to the specified Apps Script project.
+
+* Execute `make clasp_open` to go to the Apps Script project, select the Trigger.gs file under Files and run the createTimeTrigger() to automatically create the trigger to run the uploadAssets() function at the specified time intervals. Authorise any required permissions.
 
 * Share the Apps Script project with the teacher-services-infra Google group to ensure access to it is not lost.
 
@@ -87,7 +91,9 @@ A Makefile has been provided to assist with common tasks:
 
 * **edit_secrets** - This will extract the secrets stored in Azure Key Vault and enable the user to edit them.
 
-* **install** - Takes the templates and applies the secrets and pushes the script files to Google Apps Scripts,
+* **install** - Takes the templates and applies the secrets including setting the current project (development or production) in the `.clasp.json` project file.
+
+* **deploy** - Runs the install target and then pushes the script files to the selected Google Apps Scripts project.
 
 * **storage_create** - Creates an Azure Storage account using the ARM template, adds a container and enables the static website.
 
@@ -96,3 +102,5 @@ A Makefile has been provided to assist with common tasks:
 * **deploy** - Deploys the Apps Script project.
 
 * **initialise_secrets** - Create the Key Vault secret using the contents of the YAML file. Use this for first time setup of the secret.
+
+* **clasp_`<clasp command>`** - Executes the relevant clasp command (e.g. login, settings, list, status, open) in the Google directory to ensure project files are picked up correctly.

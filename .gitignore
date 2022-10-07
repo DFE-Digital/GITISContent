@@ -26,5 +26,6 @@ fetch_config.rb
 
 # Ignore Google clasp files
 Google/Code.js
+Google/Trigger.js
 Google/.clasp.json
 Google/creds.json

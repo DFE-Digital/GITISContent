@@ -20,12 +20,22 @@ production:
 	$(eval export STORAGE_NAME=s146p01gitiscontent)
 	$(eval export RESOURCE_GROUP=s146p01-rg)
 
-set-azure-account:
-	echo "Logging on to ${AZ_SUBSCRIPTION}"
+set-azure-account: az-login
+	echo "Setting Azure subscription to ${AZ_SUBSCRIPTION}"
 	az account set -s ${AZ_SUBSCRIPTION}
 
+az-login:
+	$(eval export AZURE_SUB=$(shell az account show | jq -r .name))
+	echo "AZURE_SUB: ${AZURE_SUB}"
+	if [ -z "${AZURE_SUB}" ]; then \
+		echo "Not logged in to Azure running 'az login'"; \
+		az login --only-show-errors; \
+	else \
+		echo "Logged in to Azure with subscription: ${AZURE_SUB}"; \
+	fi
+
 clean:
-	rm -f Google/Code.js Google/.clasp.json Google/creds.json
+	rm -f Google/Code.js Google/.clasp.json Google/creds.json Google/Trigger.js
 	[ ! -f fetch_config.rb ]  \
 	    `rm -f fetch_config.rb` \
 	    || true
@@ -78,12 +88,32 @@ edit_secrets: install-fetch-config set-azure-account
 install: install-fetch-config set-azure-account
 	echo "Install..."
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS} -f shell-env-var -d command -- erb ./Google/Code.js.tmpl > ./Google/Code.js
+	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS} -f shell-env-var -d command -- erb ./Google/Trigger.js.tmpl > ./Google/Trigger.js
 	./fetch_config.rb -s azure-key-vault-secret:${KEY_VAULT}/${ASSET_SECRETS} -f shell-env-var -d command -- erb ./Google/clasp.json.tmpl > ./Google/.clasp.json
-	make deploy
 
-deploy: npm set-azure-account
+deploy: npm install
 	echo "Deploy..."
 	cd Google && clasp push
 
 initialise_secrets: set-azure-account
 	az keyvault secret set --vault-name ${KEY_VAULT} --name ${ASSET_SECRETS} --file ./azure/asset-keys.yml
+
+clasp_status: npm
+	echo "Listing clasp project files ..."
+	cd Google && clasp status
+
+clasp_settings: npm
+	echo "Show clasp settings ..."
+	cd Google && clasp settings
+
+clasp_list: npm
+	echo "List clasp projects ..."
+	cd Google && clasp list
+
+clasp_login: npm
+	echo "Login with clasp ..."
+	cd Google && clasp login
+
+clasp_open: npm
+	echo "Open current clasp project ..."
+	cd Google && clasp open

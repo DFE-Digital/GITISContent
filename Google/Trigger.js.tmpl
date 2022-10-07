@@ -1,0 +1,6 @@
+function createTimeTrigger() {
+  ScriptApp.newTrigger("uploadAssets")
+    .timeBased()
+    .everyMinutes(<%= ENV.fetch('TRIGGER_MINUTES') %>)
+    .create();
+ }
