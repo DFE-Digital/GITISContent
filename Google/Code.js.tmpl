@@ -1,10 +1,3 @@
-function createTimeTrigger() {
-  ScriptApp.newTrigger("uploadAssets")
-    .timeBased()
-    .everyMinutes(<%= ENV.fetch('TRIGGER_MINUTES') %>)
-    .create();
- }
-
 function uploadAssets() {
   var drives = Drive.Drives.list({ "q": "name contains 'GITISContent'" });
   drives.items.map(drive => {
